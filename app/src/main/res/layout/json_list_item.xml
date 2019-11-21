@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="insertJsonRecord"
+            type="pk.tune.saad.studentregistration.repository.model.JsonPlaceHolder" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="10dp">
+
+
+        <TextView
+            android:id="@+id/tv_record_id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/black"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_toRightOf="@+id/iv_thumbnail"
+            android:text="@{String.valueOf(insertJsonRecord.id)}"
+            tools:text="id"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/_16ssp"
+            android:textColor="@color/black"
+            android:layout_toRightOf="@+id/iv_thumbnail"
+            android:layout_marginLeft="@dimen/_10sdp"
+            android:layout_below="@+id/tv_record_id"
+            android:text="@{insertJsonRecord.title}"
+            tools:text="Saad"/>
+
+        <ImageView
+            android:id="@+id/iv_thumbnail"
+            android:layout_width="@dimen/_50sdp"
+            android:layout_height="@dimen/_50sdp"
+            android:adjustViewBounds="true"
+            android:layout_centerVertical="true"
+            tools:src="@drawable/playlist_icon"
+            app:thumbnailUrl="@{insertJsonRecord.thumbnailUrl}"/>
+    </RelativeLayout>
+
+</layout>
