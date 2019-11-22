@@ -11,12 +11,10 @@ import retrofit2.Retrofit;
 public class RemoteListingViewModel extends ViewModel {
 
     private RemoteListingRepository remoteListingRepository;
-    private MutableLiveData<ApiResponse> listMutableLiveData;
 
     @Inject
     public RemoteListingViewModel(RemoteListingRepository remoteListingRepository){
         this.remoteListingRepository = remoteListingRepository;
-        listMutableLiveData = remoteListingRepository.getRemoteData();
     }
 
     @Override
@@ -26,6 +24,7 @@ public class RemoteListingViewModel extends ViewModel {
     }
 
     public MutableLiveData<ApiResponse> getAllList(){
-        return listMutableLiveData;
+        remoteListingRepository.callEndpointWithSingle();
+        return remoteListingRepository.getRemoteData();
     }
 }

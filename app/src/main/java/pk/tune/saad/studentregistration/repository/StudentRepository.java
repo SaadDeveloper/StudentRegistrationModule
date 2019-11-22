@@ -38,12 +38,10 @@ import retrofit2.Retrofit;
 public class StudentRepository {
 
     private StudentDao studentDao;
-    private LiveData<List<Student>> allStudents;
 
     @Inject
     public StudentRepository(StudentDatabase studentDatabase) {
         studentDao = studentDatabase.studentDao();
-        allStudents = studentDao.getAllStudents();
     }
 
     public void insertStudent(Student student) {
@@ -64,7 +62,7 @@ public class StudentRepository {
 
 
     public LiveData<List<Student>> getAllStudents() {
-        return allStudents;
+        return studentDao.getAllStudents();
     }
 
     private static class AsyncTaskIUD extends AsyncTask<Student, Void, Void> {

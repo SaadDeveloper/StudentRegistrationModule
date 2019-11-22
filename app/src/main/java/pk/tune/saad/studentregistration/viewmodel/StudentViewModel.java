@@ -18,17 +18,15 @@ import pk.tune.saad.studentregistration.repository.model.Student;
 public class StudentViewModel extends ViewModel {
 
     private StudentRepository studentRepository;
-    private LiveData<List<Student>> allStudents;
 
     /*public StudentViewModel(Context context) {
         studentRepository = new StudentRepository(context);
-        listMutableLiveData = studentRepository.callEndPoint();
+        listMutableLiveData = studentRepository.callEndPointFlowable();
         allStudents = studentRepository.getAllStudents();
     }*/
     @Inject
     public StudentViewModel(StudentRepository studentRepository){
         this.studentRepository = studentRepository;
-        allStudents = studentRepository.getAllStudents();
     }
 
     public void insertStudent(Student student){
@@ -48,6 +46,6 @@ public class StudentViewModel extends ViewModel {
     }
 
     public LiveData<List<Student>> getAllStudents(){
-        return allStudents;
+        return studentRepository.getAllStudents();
     }
 }

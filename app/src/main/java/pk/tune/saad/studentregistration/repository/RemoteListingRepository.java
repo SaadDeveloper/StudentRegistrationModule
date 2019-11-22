@@ -30,37 +30,22 @@ public class RemoteListingRepository {
     private Retrofit retrofit;
     private final ApiCallsInterface apiCallsInterface;
     private MutableLiveData<ApiResponse> mutableLiveData;
-    public CompositeDisposable compositeDisposable = new CompositeDisposable();
+    public CompositeDisposable compositeDisposable;
 
     @Inject
     public RemoteListingRepository(Retrofit retrofit){
         this.retrofit = retrofit;
         apiCallsInterface = retrofit.create(ApiCallsInterface.class);
-        mutableLiveData = callEndPoint();
+        compositeDisposable = new CompositeDisposable();
+        //mutableLiveData = callEndPointFlowable();
     }
 
     public MutableLiveData<ApiResponse> getRemoteData(){
         return mutableLiveData;
     }
 
-    public MutableLiveData<ApiResponse> callEndPoint() {
-        final MutableLiveData<ApiResponse> mutableLiveData = new MutableLiveData<>();
-        /*singleRequest().subscribe(new SingleObserver<List<JsonPlaceHolder>>() {
-            @Override
-            public void onSubscribe(Disposable d) {
-                mutableLiveData.setValue(ApiResponse.loading());
-            }
-
-            @Override
-            public void onSuccess(List<JsonPlaceHolder> jsonPlaceHolders) {
-                mutableLiveData.setValue(ApiResponse.result(jsonPlaceHolders));
-            }
-
-            @Override
-            public void onError(Throwable e) {
-                mutableLiveData.setValue(ApiResponse.error(e));
-            }
-        });*/
+    public void callEndPointFlowable() {
+        mutableLiveData = new MutableLiveData<>();
         compositeDisposable.add(flowableRequest().subscribe(new Consumer<List<JsonPlaceHolder>>() {
             @Override
             public void accept(List<JsonPlaceHolder> jsonPlaceHolders) throws Exception {
@@ -75,7 +60,26 @@ public class RemoteListingRepository {
             }
         }));
 
-        return mutableLiveData;
+    }
+
+    public void callEndpointWithSingle(){
+        mutableLiveData = new MutableLiveData<>();
+        singleRequest().subscribe(new SingleObserver<List<JsonPlaceHolder>>() {
+            @Override
+            public void onSubscribe(Disposable d) {
+                mutableLiveData.setValue(ApiResponse.loading());
+            }
+
+            @Override
+            public void onSuccess(List<JsonPlaceHolder> jsonPlaceHolders) {
+                mutableLiveData.setValue(ApiResponse.result(jsonPlaceHolders));
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                mutableLiveData.setValue(ApiResponse.error(e));
+            }
+        });
     }
 
     private Single<List<JsonPlaceHolder>> singleRequest() {
@@ -90,6 +94,7 @@ public class RemoteListingRepository {
                 doOnNext(new Consumer<List<JsonPlaceHolder>>() {
                     @Override
                     public void accept(List<JsonPlaceHolder> jsonPlaceHolders) throws Exception {
+                        mutableLiveData.setValue(ApiResponse.loading());
                         Log.i("Rx", "doOnNext");
                     }
                 }).
